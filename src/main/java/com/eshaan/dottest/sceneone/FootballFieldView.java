@@ -94,9 +94,9 @@ public class FootballFieldView extends Canvas {
 
         // draw player
         FootballFieldCoordinates coords = new FootballFieldCoordinates(FootballFieldCoordinates.FIELD_SIDE.ONE,
-                4, FootballFieldCoordinates.FIELD_HORIZONTAL_LOC.OUTSIDE, 35,
+                4, FootballFieldCoordinates.FIELD_HORIZONTAL_LOC.INSIDE, 35,
                 2, FootballFieldCoordinates.FIELD_VERTICAL_LOC.BEHIND,
-                FootballFieldCoordinates.FIELD_VERTICAL_REFERENCE.FRONT);
+                FootballFieldCoordinates.FIELD_VERTICAL_REFERENCE.FRONT_HASH);
 
         Point2D point = coords.convertToPx(this);
         System.out.println("PRINTING PX POSES");
@@ -107,6 +107,8 @@ public class FootballFieldView extends Canvas {
             gc.setFill(Color.RED);
             gc.strokeRect(point.getX(), point.getY(), pixelsPerVerticalStepLine,
                     pixelsPerHorizontalStepLine);
+            System.out.println(pixelsPerVerticalStepLine);
+            System.out.println(pixelsPerHorizontalStepLine);
         }
 
         // draw outline

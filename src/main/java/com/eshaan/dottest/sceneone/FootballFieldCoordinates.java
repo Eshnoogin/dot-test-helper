@@ -65,12 +65,12 @@ public class FootballFieldCoordinates {
         if (vertRef == FIELD_VERTICAL_REFERENCE.FRONT) {
             distanceFromFront = distanceFromClosestVertRefLn;
         } else if (vertRef == FIELD_VERTICAL_REFERENCE.FRONT_HASH) {
-            distanceFromFront = FootballFieldView.HASH_DISTANCE_FNT_YDS - distanceFromClosestVertRefLn;
+            distanceFromFront = FootballFieldView.HASH_DISTANCE_FNT_YDS + distanceFromClosestVertRefLn;
         } else if (vertRef == FIELD_VERTICAL_REFERENCE.BACK_HASH) {
             distanceFromFront = FootballFieldView.FIELD_HEIGHT_YDS - FootballFieldView.HASH_DISTANCE_FNT_YDS
                     + distanceFromClosestVertRefLn;
         } else {
-            distanceFromFront = FootballFieldView.FIELD_HEIGHT_YDS - distanceFromClosestVertRefLn;
+            distanceFromFront = FootballFieldView.FIELD_HEIGHT_YDS + distanceFromClosestVertRefLn;
         }
 
         System.out.println(distanceFromSideOne);
@@ -78,7 +78,7 @@ public class FootballFieldCoordinates {
 
         // convert mesurements to pixels
         int playerPosX = (int) (FootballFieldView.STEPS_PER_5_YRD * distanceFromSideOne / 5
-                * footballField.pixelsPerHorizontalStepLine);
+                * footballField.pixelsPerVerticalStepLine);
         int playerPosY = (int) (FootballFieldView.STEPS_PER_5_YRD * distanceFromFront / 5
                 * footballField.pixelsPerHorizontalStepLine);
 

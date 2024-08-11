@@ -1,5 +1,7 @@
 package com.eshaan.dottest.sceneone;
 
+import com.eshaan.dottest.ColorPallete;
+
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -42,23 +44,27 @@ public class FootballFieldView extends Canvas {
         setHeight(heightPx);
 
         GraphicsContext gc = getGraphicsContext2D();
+        gc.setFill(ColorPallete.GREEN);
+        gc.fillRect(0, 0, widthPx, heightPx);
+
         redrawCanvas(gc);
     }
 
     public void redrawCanvas(GraphicsContext gc) {
+
         // draw step lines
         drawGrid(gc, pixelsPerVerticalStepLine, pixelsPerHorizontalStepLine, VERTICAL_LINES_PER_FIELD,
-                HORIZONTAL_LINES_PER_FIELD, 1, Color.GRAY);
+                HORIZONTAL_LINES_PER_FIELD, 1, ColorPallete.GRAY);
 
         // draw half yard lines
         drawGrid(gc, pixelsPerVerticalStepLine * (STEPS_PER_5_YRD / 2),
                 pixelsPerHorizontalStepLine * (STEPS_PER_5_YRD / 2), VERTICAL_LINES_PER_FIELD,
-                HORIZONTAL_LINES_PER_FIELD, 1, Color.PINK);
+                HORIZONTAL_LINES_PER_FIELD, 1, ColorPallete.RED);
 
         // draw yard lines
         drawGrid(gc, pixelsPerVerticalStepLine * STEPS_PER_5_YRD, 0,
                 VERTICAL_LINES_PER_FIELD,
-                0, 2, Color.BLACK);
+                0, 2, ColorPallete.BLACK);
 
         // draw hash lines
         int fntHashPosPx = (HASH_DISTANCE_FNT_YDS / 5 * STEPS_PER_5_YRD); // represented as # of steps

@@ -1,7 +1,5 @@
 package com.eshaan.dottest.sceneone;
 
-import java.io.UnsupportedEncodingException;
-
 import com.eshaan.dottest.ColorPallete;
 import com.eshaan.dottest.sceneone.FootballFieldCoordinates.FIELD_HORIZONTAL_LOC;
 import com.eshaan.dottest.sceneone.FootballFieldCoordinates.FIELD_VERTICAL_LOC;
@@ -128,6 +126,8 @@ public class PlayerMovementListItemView extends VBox {
         playerVerticalInfoBox.getChildren().add(playerVertRfLn);
 
         getChildren().add(playerVerticalInfoBox);
+
+        setUserData("isPlayerMvmtLstItmView");
     }
 
     public void onPlayerYdLnChange(String value) {

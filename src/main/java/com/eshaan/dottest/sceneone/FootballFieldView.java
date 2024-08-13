@@ -1,5 +1,7 @@
 package com.eshaan.dottest.sceneone;
 
+import java.util.ArrayList;
+
 import com.eshaan.dottest.ColorPallete;
 
 import javafx.geometry.Point2D;
@@ -27,7 +29,7 @@ public class FootballFieldView extends Canvas {
     public int pixelsPerVerticalStepLine;
     public int pixelsPerHorizontalStepLine;
 
-    public FootballFieldCoordinates playerCoordinates;
+    public ArrayList<FootballFieldCoordinates> playerCoordinateList;
 
     GraphicsContext gc;
 
@@ -46,17 +48,18 @@ public class FootballFieldView extends Canvas {
 
         GraphicsContext gc = getGraphicsContext2D();
         this.gc = gc;
-        gc.setFill(ColorPallete.GREEN);
-        gc.fillRect(0, 0, widthPx, heightPx);
 
-        playerCoordinates = new FootballFieldCoordinates(FootballFieldCoordinates.FIELD_SIDE.ONE, 0, null, 0, 0, null,
-                null);
+        playerCoordinateList = new ArrayList<>();
+
+        playerCoordinateList
+                .add(new FootballFieldCoordinates(FootballFieldCoordinates.FIELD_SIDE.ONE, 0, null, 0, 0, null, null));
 
         redrawCanvas();
     }
 
     public void redrawCanvas() {
-
+        gc.setFill(ColorPallete.GREEN);
+        gc.fillRect(0, 0, widthPx, heightPx);
         // draw step lines
         drawGrid(gc, pixelsPerVerticalStepLine, pixelsPerHorizontalStepLine, VERTICAL_LINES_PER_FIELD,
                 HORIZONTAL_LINES_PER_FIELD, 1, ColorPallete.GRAY);
@@ -104,24 +107,33 @@ public class FootballFieldView extends Canvas {
         }
 
         // draw player
-        if ((playerCoordinates.side != null) && (playerCoordinates.horizontalLoc != null)
-                && (playerCoordinates.verticalLoc != null) && (playerCoordinates.vertRef != null)) {
-            
-            System.out.println("Drawing player");
+        int j = 0;
+        Point2D lastPoint = null;
+        for (FootballFieldCoordinates playerCoordinates : playerCoordinateList) {
+            if ((playerCoordinates.side != null) && (playerCoordinates.horizontalLoc != null)
+                    && (playerCoordinates.verticalLoc != null) && (playerCoordinates.vertRef != null)) {
 
-            Point2D point = playerCoordinates.convertToPx(this);
+                System.out.println("Drawing player");
 
-            gc.setFill(Color.RED);
-            gc.fillOval(point.getX() - PLAYER_RAD_PX, point.getY() - PLAYER_RAD_PX, 2 * PLAYER_RAD_PX,
-                    2 * PLAYER_RAD_PX);
-            System.out.println(pixelsPerVerticalStepLine);
-            System.out.println(pixelsPerHorizontalStepLine);
-        } else{
-            System.out.println("Not drawing player");
-            System.out.println((playerCoordinates.side != null));
-            System.out.println((playerCoordinates.horizontalLoc != null));
-            System.out.println((playerCoordinates.verticalLoc != null));
-            System.out.println((playerCoordinates.vertRef != null));
+                Point2D point = playerCoordinates.convertToPx(this);
+
+                gc.setFill(Color.RED);
+                gc.fillOval(point.getX() - PLAYER_RAD_PX, point.getY() - PLAYER_RAD_PX, 2 * PLAYER_RAD_PX,
+                        2 * PLAYER_RAD_PX);
+                System.out.println(pixelsPerVerticalStepLine);
+                System.out.println(pixelsPerHorizontalStepLine);
+
+            } else {
+                System.out.println("Not drawing player");
+                System.out.println((playerCoordinates.side != null));
+                System.out.println((playerCoordinates.horizontalLoc != null));
+                System.out.println((playerCoordinates.verticalLoc != null));
+                System.out.println((playerCoordinates.vertRef != null));
+            }
+            System.out.println("PRINTING");
+            System.out.println(j);
+            System.out.println(playerCoordinates.yrdLn);
+
         }
 
         // draw outline

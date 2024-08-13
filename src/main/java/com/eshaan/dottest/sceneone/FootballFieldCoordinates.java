@@ -4,34 +4,110 @@ import javafx.geometry.Point2D;
 
 public class FootballFieldCoordinates {
     public static enum FIELD_HORIZONTAL_LOC {
-        OUTSIDE,
-        INSIDE
+        OUTSIDE("outside"),
+        INSIDE("inside");
+
+        private final String displayValue;
+
+        FIELD_HORIZONTAL_LOC(String displayValue) {
+            this.displayValue = displayValue;
+        }
+    
+        public String getDisplayValue() {
+            return displayValue;
+        }
+
+        public static FIELD_HORIZONTAL_LOC fromDisplayValue(String displayValue) {
+            for (FIELD_HORIZONTAL_LOC loc : FIELD_HORIZONTAL_LOC.values()) {
+                if (loc.getDisplayValue().equals(displayValue)) {
+                    return loc;
+                }
+            }
+            throw new IllegalArgumentException("Unknown display value: " + displayValue);
+        }
     }
 
     public static enum FIELD_VERTICAL_LOC {
-        BEHIND,
-        FRONT
+        BEHIND("behind"),
+        FRONT("in front of");
+
+        private final String displayValue;
+
+        FIELD_VERTICAL_LOC(String displayValue) {
+            this.displayValue = displayValue;
+        }
+    
+        public String getDisplayValue() {
+            return displayValue;
+        }
+
+        public static FIELD_VERTICAL_LOC fromDisplayValue(String displayValue) {
+            for (FIELD_VERTICAL_LOC loc : FIELD_VERTICAL_LOC.values()) {
+                if (loc.getDisplayValue().equals(displayValue)) {
+                    return loc;
+                }
+            }
+            throw new IllegalArgumentException("Unknown display value: " + displayValue);
+        }
     }
 
     public static enum FIELD_SIDE {
-        ONE,
-        TWO
+        ONE("one"),
+        TWO("two");
+
+        private final String displayValue;
+
+        FIELD_SIDE(String displayValue) {
+            this.displayValue = displayValue;
+        }
+    
+        public String getDisplayValue() {
+            return displayValue;
+        }
+
+        public static FIELD_SIDE fromDisplayValue(String displayValue) {
+            for (FIELD_SIDE loc : FIELD_SIDE.values()) {
+                if (loc.getDisplayValue().equals(displayValue)) {
+                    return loc;
+                }
+            }
+            throw new IllegalArgumentException("Unknown display value: " + displayValue);
+        }
     }
 
     public static enum FIELD_VERTICAL_REFERENCE {
-        FRONT,
-        BACK,
-        FRONT_HASH,
-        BACK_HASH
+        FRONT("front"),
+        BACK("back"),
+        FRONT_HASH("front hash"),
+        BACK_HASH("back hash");
+
+        private final String displayValue;
+
+        FIELD_VERTICAL_REFERENCE(String displayValue) {
+            this.displayValue = displayValue;
+        }
+    
+        public String getDisplayValue() {
+            return displayValue;
+        }
+
+        public static FIELD_VERTICAL_REFERENCE fromDisplayValue(String displayValue) {
+            for (FIELD_VERTICAL_REFERENCE loc : FIELD_VERTICAL_REFERENCE.values()) {
+                if (loc.getDisplayValue().equals(displayValue)) {
+                    return loc;
+                }
+            }
+            throw new IllegalArgumentException("Unknown display value: " + displayValue);
+        }
     }
 
-    FIELD_SIDE side;
-    float stepsFromYrdLine;
-    FIELD_HORIZONTAL_LOC horizontalLoc;
-    int yrdLn;
-    float stepsFromVertRef;
-    FIELD_VERTICAL_LOC verticalLoc;
-    FIELD_VERTICAL_REFERENCE vertRef;
+    public FIELD_SIDE side;
+    public float stepsFromYrdLine;
+    public FIELD_HORIZONTAL_LOC horizontalLoc;
+    public int yrdLn;
+    public float stepsFromVertRef;
+    public FIELD_VERTICAL_LOC verticalLoc;
+    public FIELD_VERTICAL_REFERENCE vertRef;
 
     public FootballFieldCoordinates(FIELD_SIDE side,
             float stepsFromYrdLine, FIELD_HORIZONTAL_LOC horizontalLoc, int yrdLn,

@@ -15,7 +15,7 @@ public class FootballFieldView extends Canvas {
     public static final float FIELD_HEIGHT_YDS = 52.5f;
     public static final int HASH_DISTANCE_FNT_YDS = 20;
     public static final int YRD_LN_NUMBER_Y_OFFSET = 10; // yard line text px offset(to the left)
-    public static final int PLAYER_RAD_PX = 5;
+    public static final int PLAYER_RAD_PX = 3;
 
     public static final int VERTICAL_LINES_PER_FIELD = (int) (FIELD_WIDTH_YDS / 5 * STEPS_PER_5_YRD);
     public static final int HORIZONTAL_LINES_PER_FIELD = (int) (FIELD_HEIGHT_YDS / 5 * STEPS_PER_5_YRD);
@@ -27,8 +27,9 @@ public class FootballFieldView extends Canvas {
     public int pixelsPerVerticalStepLine;
     public int pixelsPerHorizontalStepLine;
 
-    private FootballFieldCoordinates playerCoordinates;
-    private boolean doPlayerRender = true;
+    public FootballFieldCoordinates playerCoordinates;
+
+    GraphicsContext gc;
 
     public FootballFieldView(double maxWidth, double maxHeight) {
         super();
@@ -44,13 +45,17 @@ public class FootballFieldView extends Canvas {
         setHeight(heightPx);
 
         GraphicsContext gc = getGraphicsContext2D();
+        this.gc = gc;
         gc.setFill(ColorPallete.GREEN);
         gc.fillRect(0, 0, widthPx, heightPx);
 
-        redrawCanvas(gc);
+        playerCoordinates = new FootballFieldCoordinates(FootballFieldCoordinates.FIELD_SIDE.ONE, 0, null, 0, 0, null,
+                null);
+
+        redrawCanvas();
     }
 
-    public void redrawCanvas(GraphicsContext gc) {
+    public void redrawCanvas() {
 
         // draw step lines
         drawGrid(gc, pixelsPerVerticalStepLine, pixelsPerHorizontalStepLine, VERTICAL_LINES_PER_FIELD,
@@ -99,22 +104,24 @@ public class FootballFieldView extends Canvas {
         }
 
         // draw player
-        FootballFieldCoordinates coords = new FootballFieldCoordinates(FootballFieldCoordinates.FIELD_SIDE.ONE,
-                4, FootballFieldCoordinates.FIELD_HORIZONTAL_LOC.INSIDE, 35,
-                2, FootballFieldCoordinates.FIELD_VERTICAL_LOC.BEHIND,
-                FootballFieldCoordinates.FIELD_VERTICAL_REFERENCE.FRONT_HASH);
+        if ((playerCoordinates.side != null) && (playerCoordinates.horizontalLoc != null)
+                && (playerCoordinates.verticalLoc != null) && (playerCoordinates.vertRef != null)) {
+            
+            System.out.println("Drawing player");
 
-        Point2D point = coords.convertToPx(this);
-        System.out.println("PRINTING PX POSES");
-        System.out.println(point.getX());
-        System.out.println(point.getY());
+            Point2D point = playerCoordinates.convertToPx(this);
 
-        if (doPlayerRender) {
             gc.setFill(Color.RED);
-            gc.strokeRect(point.getX(), point.getY(), pixelsPerVerticalStepLine,
-                    pixelsPerHorizontalStepLine);
+            gc.fillOval(point.getX() - PLAYER_RAD_PX, point.getY() - PLAYER_RAD_PX, 2 * PLAYER_RAD_PX,
+                    2 * PLAYER_RAD_PX);
             System.out.println(pixelsPerVerticalStepLine);
             System.out.println(pixelsPerHorizontalStepLine);
+        } else{
+            System.out.println("Not drawing player");
+            System.out.println((playerCoordinates.side != null));
+            System.out.println((playerCoordinates.horizontalLoc != null));
+            System.out.println((playerCoordinates.verticalLoc != null));
+            System.out.println((playerCoordinates.vertRef != null));
         }
 
         // draw outline

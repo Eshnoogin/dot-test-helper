@@ -149,9 +149,6 @@ public class FootballFieldCoordinates {
             distanceFromFront = FootballFieldView.FIELD_HEIGHT_YDS + distanceFromClosestVertRefLn;
         }
 
-        System.out.println(distanceFromSideOne);
-        System.out.println(distanceFromFront);
-
         // convert mesurements to pixels
         int playerPosX = (int) (FootballFieldView.STEPS_PER_5_YRD * distanceFromSideOne / 5
                 * footballField.pixelsPerVerticalStepLine);

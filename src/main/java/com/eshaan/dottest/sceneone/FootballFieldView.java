@@ -18,6 +18,10 @@ public class FootballFieldView extends Canvas {
     public static final int HASH_DISTANCE_FNT_YDS = 20;
     public static final int YRD_LN_NUMBER_Y_OFFSET = 10; // yard line text px offset(to the left)
     public static final int PLAYER_RAD_PX = 3;
+    public static final int ARROW_SPACE_PX = 5; // space between the actual point and where the line starts; space
+                                                // horizontally so math is easier
+    public static final int ARROW_LEN_PX = 10; // length of the pointer of the arrow
+    public static final float ARROW_ANGLE_RAD = 2.52f;
 
     public static final int VERTICAL_LINES_PER_FIELD = (int) (FIELD_WIDTH_YDS / 5 * STEPS_PER_5_YRD);
     public static final int HORIZONTAL_LINES_PER_FIELD = (int) (FIELD_HEIGHT_YDS / 5 * STEPS_PER_5_YRD);
@@ -107,33 +111,61 @@ public class FootballFieldView extends Canvas {
         }
 
         // draw player
-        int j = 0;
         Point2D lastPoint = null;
         for (FootballFieldCoordinates playerCoordinates : playerCoordinateList) {
             if ((playerCoordinates.side != null) && (playerCoordinates.horizontalLoc != null)
                     && (playerCoordinates.verticalLoc != null) && (playerCoordinates.vertRef != null)) {
-
-                System.out.println("Drawing player");
 
                 Point2D point = playerCoordinates.convertToPx(this);
 
                 gc.setFill(Color.RED);
                 gc.fillOval(point.getX() - PLAYER_RAD_PX, point.getY() - PLAYER_RAD_PX, 2 * PLAYER_RAD_PX,
                         2 * PLAYER_RAD_PX);
-                System.out.println(pixelsPerVerticalStepLine);
-                System.out.println(pixelsPerHorizontalStepLine);
 
+                // draw arrow to point to next drawn point
+                if (lastPoint != null) {
+                    // line math: https://www.desmos.com/calculator/ycueqa0gbh
+                    int x1 = (int) point.getX();
+                    int y1 = (int) point.getY();
+
+                    int x0 = (int) lastPoint.getX();
+                    int y0 = (int) lastPoint.getY();
+
+                    double m = (x0 != x1) ? (double) (y0 - y1) / (x0 - x1) : Double.POSITIVE_INFINITY;
+                    double b = -m * x1 + y1;
+                    int s = x1 - x0;
+                    double d1 = Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
+
+                    double theta1 = Math.atan2(y1 - y0, x1 - x0);
+
+                    double t = ARROW_SPACE_PX / d1;
+                    double pt = 1 - t;
+
+                    double startx = s * t + x0;
+                    double starty = m * startx + b;
+
+                    double p0x = s * pt + x0;
+                    double p0y = m * p0x + b;
+
+                    if (x0 == x1) {
+                        p0x = x1;
+                        p0y = y1 - ARROW_SPACE_PX;
+                        startx = x1;
+                        starty = y0 + ARROW_SPACE_PX;
+                    }
+
+                    double arrowx0 = ARROW_LEN_PX * Math.cos(ARROW_ANGLE_RAD + theta1) + p0x;
+                    double arrowy0 = ARROW_LEN_PX * Math.sin(ARROW_ANGLE_RAD + theta1) + p0y;
+                    double arrowx1 = ARROW_LEN_PX * Math.cos((2 * Math.PI - ARROW_ANGLE_RAD) + theta1) + p0x;
+                    double arrowy1 = ARROW_LEN_PX * Math.sin((2 * Math.PI - ARROW_ANGLE_RAD) + theta1) + p0y;
+
+                    gc.strokeLine(startx, starty, p0x, p0y);
+                    gc.strokeLine(p0x, p0y, arrowx0, arrowy0);
+                    gc.strokeLine(p0x, p0y, arrowx1, arrowy1);
+                }
+                lastPoint = point;
             } else {
-                System.out.println("Not drawing player");
-                System.out.println((playerCoordinates.side != null));
-                System.out.println((playerCoordinates.horizontalLoc != null));
-                System.out.println((playerCoordinates.verticalLoc != null));
-                System.out.println((playerCoordinates.vertRef != null));
             }
-            System.out.println("PRINTING");
-            System.out.println(j);
-            System.out.println(playerCoordinates.yrdLn);
-
         }
 
         // draw outline
@@ -157,14 +189,4 @@ public class FootballFieldView extends Canvas {
             gc.strokeLine(0, i * pixelSpacingY, widthPx, i * pixelSpacingY);
         }
     }
-
-    // protected void setPlayerPosXPx(int playerPosXPx) {
-    // this.playerPosXPx = playerPosXPx;
-    // this.doPlayerRender = true;
-    // }
-
-    // protected void setPlayerPosYPx(int playerPosYPx) {
-    // this.playerPosYPx = playerPosYPx;
-    // this.doPlayerRender = true;
-    // }
 }
